@@ -1,0 +1,65 @@
+{% extends "main_template.html" %}
+{% block title%}todo{% endblock%}
+
+{% block body%}
+
+
+<form action="{% url 'read_todo' %}" method="post"> {% csrf_token %}
+    <i>enter todo text</i><br>
+    <input type="text" name="text" maxlength="150">
+    <br><br>
+    <i>select priority</i><br>
+    <input type="radio" name="priority" value="1" checked>1 - red<br>
+    <input type="radio" name="priority" value="2">2 - yellow<br>
+    <input type="radio" name="priority" value="3">3 - green<br>
+    <input type="submit"></form>
+    <br><br>
+
+    <a href="{% url 'read_todo_priority' priority=1 %}"><font color="red">filter red priority</font></a>
+    <a href="{% url 'read_todo_priority' priority=2 %}"><font color="gold">filter yellow priority</font></a>
+    <a href="{% url 'read_todo_priority' priority=3 %}"><font color="green">filter green priority</font></a>
+    <a href="{% url 'read_todo' %}">without filter</a>
+
+    <table border="3">
+        <tr><font size="4" color="red" face="Arial"></font>
+        <td><font color="red" face="Arial">text todo</font></td>
+        <td><font color="red" face="Arial">priority</font></td>
+        <td><font color="red" face="Arial">date of create</font></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    {% for e in data%}
+    <tr>
+
+        <td>{{e.text}}</td>
+        {% if e.priority == 1 %}
+        <td><font size="4" color="red" face="Arial">{{e.priority}}</font></td>
+        {% elif e.priority == 2 %}
+        <td><font size="4" color="gold" face="Arial">{{e.priority}}</font></td>
+        {% else %}
+        <td><font size="4" color="green" face="Arial">{{e.priority}}</font></td>
+        {%endif%}
+        <td>{{ e.date_create }}</td>
+        <td><form action="{% url 'delete' id=e.id %}" method="post"> {% csrf_token %}
+            <button>delete</button></form></td>
+        <td><a href="{% url 'update' id=e.id %}">
+            <button>update</button></a></td>
+        <td><form action="{% url 'up' display=e.display_priority %}" method="post">
+            <button>up</button></form></td>
+       <td><form action="{% url 'down' display=e.display_priority %}" method="post">
+            <button>down</button></form></td>
+        {% if e.done == False %}
+            <td><form action="{% url 'done' id=e.id %}" method="post">
+                <button>mark as done</button></form></td>
+        {% else%}
+            <td><form action="{% url 'done' id=e.id %}" method="post">
+                <button><font color="green">DONE</font></button></form></td>
+        {% endif%}
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'main_template.html' %}
+{% block body %}
+{% for m in messages %}
+<h3 class="text-danger">{{ m }}</h3>
+{% endfor %}
+<i>Войти с помощью: in future</i>
+{#<a href="{% url 'social:begin' 'github' %}">github</a>#}
+{#<a href="{% url 'social:begin' 'google-oauth2' %}">Google+</a>#}
+{#<a href="{% url 'social:begin' 'linkedin-oauth2' %}">linkedin</a>#}
+{% load crispy_forms_tags %}
+<form action="{% url 'register' %}" method="post">
+    {% csrf_token%}
+    {{ form|crispy }}
+    <button type="submit">OK</button>
+
+</form>
+
+{% endblock %}
